@@ -1,0 +1,68 @@
+replicaCount: 1
+
+envs:
+  TZ: 'AMERICA/SP'
+
+startupCommand:
+  enabled: false
+
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: '200m'
+    memory: '500Mi'
+  requests:
+    cpu: '200m'
+    memory: '500Mi'
+
+autoscaling:
+ enabled: false
+
+
+image:
+  repository: 'replaced_value'
+  pullPolicy: Always
+  tag: 'replaced_value'
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+nodeSelector:
+  agentpool: pgp
+
+tolerations:
+  - key: kubernetes.azure.com/scalesetpriority
+    operator: "Equal"
+    value: spot
+    effect: "NoSchedule"
+
+affinity: {}
+ambevtech:
+  uniqueKey: 'replaced_value'
+datadog:
+  apm:
+    enabled: true
+  env: 'pgp-dev'
+nameOverride: ""
+fullnameOverride: ""
+initContainers: []
+imagePullSecrets:
+  - name: "nexus-auth"
+secret:
+  enabled: true
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+deployment:
+  enabled: false
+cronjob:
+  enabled: true

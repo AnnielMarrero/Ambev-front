@@ -1,0 +1,60 @@
+#Não há necessidade de mexer nesse aquivo, todas as informações do projeto devem ser inseridas no var-global.yml
+variables:
+- template: vars/vars-global.yml
+
+trigger:
+  branches:
+    include:
+    - develop
+  paths:
+    exclude:
+    - CHANGELOG.md
+pr:
+  branches:
+    include:
+      - main
+      - master
+  paths:
+    exclude:
+    - CHANGELOG.md
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: AMBEVTECH-PIPELINES/_git/PIPELINE-TEMPLATES
+      ref: refs/tags/2.0.4
+
+    - repository: blueprints
+      type: git
+      name: AMBEVTECH-PIPELINES/_git/PIPELINE-BLUEPRINTS
+      ref: refs/tags/2.0.0
+
+stages:
+  - template: frontend/pipeline-ci.yml@blueprints
+    parameters:
+      nodeVersion: ${{variables.nodeVersion}}
+      packageManager: ${{variables.packageManager}}
+      uniqueKey: ${{variables.uniqueKey}}
+      sonarServiceConnectionName: ${{variables.sonarServiceConnectionName}}
+      sonarCoverageExclusions: ${{variables.sonarCoverageExclusions}}
+      dtrackApiKey: ${{variables.dtrackApiKey}}
+      WorkingDirectory: ${{variables.WorkingDirectory}}
+      environmentType: ${{variables.environmentType}}
+      projectName: ${{variables.projectName}}
+      frontendTest: ${{variables.frontendTest}}
+      #frontendTestCommandArgs: ${{ variables.frontendTestCommandArgs }}
+      sonarSourceDirectory: ${{ variables.sonarSourceDirectory }}
+      isContainer: ${{variables.isContainer}}
+      containerRegistryConnection: ${{variables.containerRegistryConnection}}
+
+  - template: shared/pipeline-cd.yml@blueprints
+    parameters:
+      projectName: ${{variables.projectName}}
+      environmentType: ${{variables.environmentType}}
+      pipelineServicePath: ${{ variables.pipelineServicePath }}
+      versioningType: ${{ variables.versioningType }}
+      uniqueKey: ${{ variables.uniqueKey }}
+      techmetricsProductId: ${{ variables.techmetricsProductId }}
+      techmetricsmoduleId: ${{ variables.techmetricsmoduleId }}
+      sonarServiceConnectionName: ${{variables.sonarServiceConnectionName}}

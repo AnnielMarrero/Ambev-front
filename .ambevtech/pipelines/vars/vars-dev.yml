@@ -1,0 +1,25 @@
+variables:
+  containerRegistryConnection: 'Nexus - stg' #Nome da service connection do nexus
+  helmAksServiceConnection: 'aks-functions-dev-scus-001' #Nome da service connection do aks
+  helmNamespace: 'pgp' #Nome do namespace no kubernetes
+  helmReleaseName: 'pgp' #Nome da release a ser criado no helm. Ex: nomeapp
+  WorkingDirectory: '$(System.DefaultWorkingDirectory)'
+  getSecrets: true #Habita o secret do helm, caso negativo ele não irá montar as variáveis no container
+  azureSubscription: 'ambev-functions-core-rg-functions-prd-brs' #ResourceGroup onde está o KeyVault
+  KeyVaultName: 'kvpgp-eventosdev-seywg' #Nome do keyvault
+  SecretsFilter: 'PGP-' #prefixo das variáveis no keyvault
+  createConfigMapFile: false #Caso precise criar um configmap de algum arquivo deixe a opção habilitada e informa um valor para configMapScriptsPath
+  configMapScriptsPath: "" #Caminho para  arquivo baseado no ARTEFATO criado durante o BUILD
+  helmOverrideValues: >
+    image.repository=docker-nonprod.ambevdevs.com.br/$(dockerImageName)
+    --set image.tag=$(Build.BuildNumber)
+    --set datadog.version=$(Build.BuildNumber)
+    --set ambevtech.uniqueKey=$(uniqueKey)
+
+
+
+  privateCluster: true
+  poolName: ambev-azagent-pool-1-functions-dev-scus-1-lx
+
+  helmAzureResourceGroup: aks-001-rg-dev-scus
+  helmKubernetesCluster: aks-functions-dev-scus-001

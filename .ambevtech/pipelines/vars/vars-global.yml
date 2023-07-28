@@ -1,0 +1,30 @@
+variables:
+  # Pipeline settings
+  versioningType: SemVer
+  environmentType: helm_deploy
+  isContainer: true
+  uniqueKey: 'ambevtech-functions-techlegal-pgp-web'
+  techmetricsProductId: 183
+  techmetricsmoduleId: 2451
+  projectName: 'ambevtech-functions-techlegal-pgp-web'
+
+  # sonar config
+  sonarServiceConnectionName: 'SonarQube' #Nome da service connection do sonarqube
+  sonarCoverageExclusions: '**/*.test.*,**/__snapshots__/**,src/*.ts,**/lang/**' #Lista de excrusão do sonar
+  sonarSourceDirectory: ""
+
+  # docker config
+  containerRegistryConnection: 'Nexus - stg'
+  WorkingDirectory: $(System.DefaultWorkingDirectory)
+
+  # node config
+  nodeVersion: '16.x'
+  packageManager: yarn
+  publish_npm: true
+
+  privateCluster: true
+  FeedCredentials: '' #Caso use o AzureDevops Artifacts passe o Id do Feed, ou use a opção abaixo para nexus ou deixar vazio caso não precise.
+
+  #teste
+  frontendTest: true
+  #frontendTestCommandArgs: "run test -- --no-watch --no-progress --collectCoverage --browsers=ChromeHeadless"
